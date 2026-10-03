@@ -1,0 +1,166 @@
+{
+  "source": "https://github.com/KhronosGroup/glTF-Sample-Assets",
+  "commit": "edc7c9e67c639d230715049ee31f9a96a6babbbe",
+  "redistributed": false,
+  "note": "Index only. Files are fetched from the pinned upstream commit, never copied here; each keeps its own license and attribution.",
+  "models": [
+    {
+      "name": "ABeautifulGame",
+      "exercises": "Transmission + volume (glass pieces), texture-rich PBR chess set",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "attribution": [
+        "ASWF",
+        "Ed Mackey"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/ABeautifulGame/glTF-Binary/ABeautifulGame.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/ABeautifulGame",
+      "format": "glb"
+    },
+    {
+      "name": "MosquitoInAmber",
+      "exercises": "Transmission + volume + IOR: a body inside amber",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "attribution": [
+        "Sketchfab"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/MosquitoInAmber/glTF-Binary/MosquitoInAmber.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/MosquitoInAmber",
+      "format": "glb"
+    },
+    {
+      "name": "IridescenceLamp",
+      "exercises": "Iridescence (thin film) + transmission",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "attribution": [
+        "Wayfair, LLC"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/IridescenceLamp/glTF-Binary/IridescenceLamp.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/IridescenceLamp",
+      "format": "glb"
+    },
+    {
+      "name": "GlamVelvetSofa",
+      "exercises": "Sheen (velvet)",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "attribution": [
+        "Wayfair, LLC"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/GlamVelvetSofa/glTF-Binary/GlamVelvetSofa.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/GlamVelvetSofa",
+      "format": "glb"
+    },
+    {
+      "name": "SheenChair",
+      "exercises": "Sheen + variants",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "attribution": [
+        "Wayfair, LLC"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SheenChair/glTF-Binary/SheenChair.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SheenChair",
+      "format": "glb"
+    },
+    {
+      "name": "CarConcept",
+      "exercises": "Clearcoat car paint, transmission glass",
+      "licenses": [
+        "CC-BY-4.0",
+        "LicenseRef-LegalMark-Khronos"
+      ],
+      "attribution": [
+        "Darmstadt Graphics Group GmbH",
+        "Khronos Group"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/CarConcept/glTF-Binary/CarConcept.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/CarConcept",
+      "format": "glb"
+    },
+    {
+      "name": "ToyCar",
+      "exercises": "Clearcoat, transmission, sheen in one toy",
+      "licenses": [
+        "CC0-1.0"
+      ],
+      "attribution": [
+        "Public"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/ToyCar/glTF-Binary/ToyCar.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/ToyCar",
+      "format": "glb"
+    },
+    {
+      "name": "StainedGlassLamp",
+      "exercises": "Transmission + volume + emissive, the closest analogue to a lit interior",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "attribution": [
+        "Wayfair"
+      ],
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/StainedGlassLamp",
+      "format": "gltf-multifile",
+      "gltf": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/StainedGlassLamp/glTF/StainedGlassLamp.gltf",
+      "note": "No .glb upstream: fetch the whole glTF/ folder (the .gltf references external .bin and images)."
+    },
+    {
+      "name": "AnisotropyBarnLamp",
+      "exercises": "Anisotropy + emissive",
+      "licenses": [
+        "CC-BY-4.0"
+      ],
+      "attribution": [
+        "Copyright 2023 Wayfair, LLC"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/AnisotropyBarnLamp/glTF-Binary/AnisotropyBarnLamp.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/AnisotropyBarnLamp",
+      "format": "glb"
+    },
+    {
+      "name": "SunglassesKhronos",
+      "exercises": "Iridescence + transmission lenses",
+      "licenses": [
+        "CC-BY-4.0",
+        "LicenseRef-LegalMark-Khronos"
+      ],
+      "attribution": [
+        "Darmstadt Graphics Group GmbH",
+        "Khronos Group"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SunglassesKhronos/glTF-Binary/SunglassesKhronos.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/SunglassesKhronos",
+      "format": "glb"
+    },
+    {
+      "name": "ChronographWatch",
+      "exercises": "Clearcoat, transmission crystal, fine detail for parallax",
+      "licenses": [
+        "CC-BY-4.0",
+        "LicenseRef-LegalMark-DGG",
+        "LicenseRef-LegalMark-Khronos"
+      ],
+      "attribution": [
+        "Darmstadt Graphics Group GmbH",
+        "Khronos Group"
+      ],
+      "glb": "https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Assets/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/ChronographWatch/glTF-Binary/ChronographWatch.glb",
+      "page": "https://github.com/KhronosGroup/glTF-Sample-Assets/tree/edc7c9e67c639d230715049ee31f9a96a6babbbe/Models/ChronographWatch",
+      "format": "glb"
+    }
+  ],
+  "excluded": [
+    {
+      "name": "DragonAttenuation",
+      "reason": "LicenseRef-Stanford-Graphics: the Stanford scan repository grants research use; a commercial technology demo is outside it."
+    }
+  ]
+}

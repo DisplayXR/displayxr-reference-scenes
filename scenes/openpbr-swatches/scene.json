@@ -1,0 +1,27 @@
+{
+  "id": "openpbr-swatches",
+  "title": "OpenPBR material swatches",
+  "status": "planned",
+  "kind": "usd-materialx-openpbr",
+  "plan": "Every official OpenPBR example material (83 in the OpenPBR spec repo + 10 in MaterialX) on the usd-wg StandardShaderBall, one material per scene: the panel shows coat depth, fuzz and transmission through parallax on a single object.",
+  "sources": [
+    {
+      "repo": "https://github.com/AcademySoftwareFoundation/OpenPBR",
+      "path": "examples/",
+      "license": "Apache-2.0"
+    },
+    {
+      "repo": "https://github.com/AcademySoftwareFoundation/MaterialX",
+      "path": "resources/Materials/Examples/OpenPbr/",
+      "license": "Apache-2.0"
+    },
+    {
+      "repo": "https://github.com/usd-wg/assets",
+      "path": "full_assets/StandardShaderBall/",
+      "license": "CC-BY-4.0"
+    }
+  ],
+  "blockers": [
+    "The example .mtlx documents declare colorspace=\"acescg\": the viewer and converter must convert ACEScg colour inputs to linear Rec.709 first."
+  ]
+}

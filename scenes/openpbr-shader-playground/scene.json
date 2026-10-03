@@ -1,0 +1,67 @@
+{
+  "id": "openpbr-shader-playground",
+  "title": "OpenPBR Shader Playground",
+  "status": "available",
+  "kind": "usd-materialx-openpbr",
+  "exercises": [
+    "MaterialX OpenPBR evaluation (61 materials)",
+    "USD composition: sublayers, payload, .mtlx references, overrides",
+    "UsdLux scene lights + cube shadow maps",
+    "USD render cameras",
+    "GeomSubset materials",
+    "UDIM tiles",
+    "transmission, subsurface, coat, fuzz, emission"
+  ],
+  "license": {
+    "spdx": "LicenseRef-ASWF-DAL-1.1",
+    "file": "LICENSES/ASWF-DAL-1.1_OpenPBR-Shader-Playground.txt",
+    "notice": "OpenPBR Shader Playground Copyright 2024 Adobe. All rights reserved.",
+    "use": "Software and hardware product demonstration, development, benchmarking only. No endorsement by the copyright holder is implied; publications showing images derived from it must carry the notice."
+  },
+  "source": {
+    "repo": "https://github.com/DigitalProductionExampleLibrary/OpenPBRShaderPlayground",
+    "tag": "v1.1",
+    "commit": "50afea120244f83294e16320f0366676fcfaed70",
+    "page": "https://dpel.aswf.io/openpbr-shader-playground"
+  },
+  "redistributed": true,
+  "packs": [
+    {
+      "file": "openpbr-shader-playground-usd.zip",
+      "format": "usd",
+      "entry": "ShdrPlygrnd/ShdrPlygrnd_OpenPBR.usda",
+      "built_by": "scripts/build_usd_slim.py --max-size 1024 --jpeg 90",
+      "loads_in": "displayxr-demo-modelviewer >= the release containing #160 (native MaterialX OpenPBR)"
+    },
+    {
+      "file": "openpbr-shader-playground.glb",
+      "format": "glb",
+      "built_by": "displayxr-demo-modelviewer scripts/openpbr_mtlx_to_gltf.py --groups /World --jpeg-quality 90 --decimate bubbles=0.2,bubblesMasonJar=0.2,OJ=0.4",
+      "converter_commit": "be6a8b6141323be187a4dcdb1eea5d1afe90d9ed",
+      "extensions": [
+        "KHR_materials_coat",
+        "KHR_materials_fuzz",
+        "KHR_materials_scatter",
+        "KHR_materials_transmission",
+        "KHR_materials_volume",
+        "KHR_lights_punctual"
+      ]
+    }
+  ],
+  "cameras": [
+    "renderCam_CU_planeTOP",
+    "renderCam_CU_matAndJar",
+    "renderCam_main",
+    "renderCam_mainCU",
+    "renderCam_CU_scissors",
+    "renderCam_CU_paintBrushes",
+    "renderCam_CU_planeFrnt",
+    "renderCam_CU_meetMATandTube"
+  ],
+  "known_divergences": [
+    "Dome light HDRI (bonifacio_aragon_stairs.exr) is not in the upstream asset: no dome fill.",
+    "No bounce light: shadowed regions read darker than the published Arnold stills.",
+    "Transmissive materials cast no shadow (Arnold casts coloured transmission shadows).",
+    "walls: the authored normal-map override (wall_Normal_G.tif) is not a unit-length tangent map; walls render dark."
+  ]
+}
