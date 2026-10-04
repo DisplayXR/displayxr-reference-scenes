@@ -15,7 +15,8 @@ development and benchmarking.
 |---|---|---|---|
 | [OpenPBR Shader Playground](scenes/openpbr-shader-playground/) | OpenUSD + MaterialX OpenPBR, lights, cameras | packs on releases | ASWF Digital Assets License v1.1 |
 | [DisplayXR material tests](scenes/displayxr-material-tests/) | glTF `KHR_materials_*` sweeps | in repo | CC0-1.0 |
-| [OpenPBR material swatches](scenes/openpbr-swatches/) | 93 OpenPBR example materials on the standard shader ball | planned | Apache-2.0 + CC-BY-4.0 |
+| [OpenPBR material swatches](scenes/openpbr-swatches/) | 85 OpenPBR reference materials (ACEScg) on the standard shader ball, one per scene | pack on releases | Apache-2.0 + CC-BY-4.0 |
+| [DisplayXR 3D-display tests](scenes/displayxr-display-tests/) | depth ladder, view-rig box, edge violation, crosstalk, labelled in display heights | in repo | CC0-1.0 |
 | [Khronos glTF showcases](index/khronos-gltf-sample-assets.json) | 11 glTF extension showcases | **index only**: fetched from upstream at a pinned commit | per model: CC0-1.0 / CC-BY-4.0 |
 
 ## Licensing

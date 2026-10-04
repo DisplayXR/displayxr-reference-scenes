@@ -5,7 +5,9 @@
 
 Rules (they are what keep the licensing honest):
   * every scenes/<id>/scene.json has id == folder, a status, a licence block
-    whose `file` exists, and a source pinned to a commit (or a list of sources);
+    whose `file` (or every entry of `files`) exists, and either a source pinned
+    to a commit, a list of sources each pinned to a commit, or (for content
+    generated HERE) a `generator` script that exists in this repository;
   * a redistributed third-party scene has a NOTICE.md;
   * files a scene lists exist; packs are NOT committed (release assets only);
   * index files pin a commit, are marked redistributed:false, and every entry
@@ -30,10 +32,20 @@ for sj in sorted((ROOT / "scenes").glob("*/scene.json")):
         if not d.get("sources") and not d.get("source"): err(f"{where}: planned scene must name its sources")
         continue
     lic = d.get("license") or {}
-    if not lic.get("spdx") or not lic.get("file"): err(f"{where}: license.spdx and license.file required")
-    elif not (ROOT / lic["file"]).exists(): err(f"{where}: license file {lic['file']} missing")
-    src = d.get("source") or {}
-    if not src.get("commit"): err(f"{where}: source must be pinned to a commit")
+    lic_files = lic.get("files") or ([lic["file"]] if lic.get("file") else [])
+    if not lic.get("spdx") or not lic_files: err(f"{where}: license.spdx and license.file(s) required")
+    for f in lic_files:
+        if not (ROOT / f).exists(): err(f"{where}: license file {f} missing")
+    srcs = d.get("sources") or [d.get("source") or {}]
+    for src in srcs:
+        if src.get("generator"):
+            if "displayxr-reference-scenes" not in src.get("repo", ""):
+                err(f"{where}: a generator source must be this repository")
+            elif not (ROOT / src["generator"]).exists():
+                err(f"{where}: generator {src['generator']} missing")
+        elif len(src.get("commit", "")) != 40:
+            err(f"{where}: source {src.get('repo', '?')} must be pinned to a full 40-char commit")
+    src = srcs[0]
     third_party = not lic.get("spdx", "").startswith("CC0") or "displayxr" not in src.get("repo", "").lower()
     if d.get("redistributed") and third_party and not (sj.parent / "NOTICE.md").exists():
         err(f"{where}: redistributed third-party scene needs NOTICE.md")

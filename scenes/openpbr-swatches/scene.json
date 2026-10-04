@@ -1,27 +1,53 @@
 {
   "id": "openpbr-swatches",
   "title": "OpenPBR material swatches",
-  "status": "planned",
+  "status": "available",
   "kind": "usd-materialx-openpbr",
-  "plan": "Every official OpenPBR example material (83 in the OpenPBR spec repo + 10 in MaterialX) on the usd-wg StandardShaderBall, one material per scene: the panel shows coat depth, fuzz and transmission through parallax on a single object.",
+  "exercises": [
+    "MaterialX OpenPBR evaluation, one reference material per scene",
+    "MaterialX colorspace: ACEScg documents converted to linear Rec.709",
+    "USD composition: sublayers, references (incl. ../ asset paths), .mtlx references, material binding overrides",
+    "coat, fuzz, transmission, subsurface, thin film, metals through parallax on a single object"
+  ],
+  "license": {
+    "spdx": "Apache-2.0 AND CC-BY-4.0",
+    "files": ["LICENSES/Apache-2.0.txt", "LICENSES/CC-BY-4.0.txt"],
+    "notice": "OpenPBR and MaterialX example materials: Apache-2.0, Academy Software Foundation contributors. StandardShaderBall: CC-BY-4.0, usd-wg/assets contributors."
+  },
   "sources": [
     {
       "repo": "https://github.com/AcademySoftwareFoundation/OpenPBR",
-      "path": "examples/",
+      "commit": "f8d6d947dfae4c9b599965a86c22826ea7a8dbfb",
+      "path": "examples",
       "license": "Apache-2.0"
     },
     {
       "repo": "https://github.com/AcademySoftwareFoundation/MaterialX",
-      "path": "resources/Materials/Examples/OpenPbr/",
+      "commit": "30e80703d9e508b77711ce314ca1620a8425c383",
+      "path": "resources/Materials/Examples/OpenPbr",
       "license": "Apache-2.0"
     },
     {
       "repo": "https://github.com/usd-wg/assets",
-      "path": "full_assets/StandardShaderBall/",
+      "commit": "3b75c2dad6a494897557dcca0098257bcf42a8c6",
+      "path": "full_assets/StandardShaderBall",
       "license": "CC-BY-4.0"
     }
   ],
-  "blockers": [
-    "The example .mtlx documents declare colorspace=\"acescg\": the viewer and converter must convert ACEScg colour inputs to linear Rec.709 first."
+  "redistributed": true,
+  "packs": [
+    {
+      "file": "openpbr-swatches-usd.zip",
+      "format": "usd",
+      "entry": "openpbr-swatches/swatches/<name>.usda (index: swatches/INDEX.tsv)",
+      "built_by": "scripts/build_swatches.sh",
+      "count": 85,
+      "loads_in": "displayxr-demo-modelviewer >= the release containing #165 (MaterialX colorspace, ../ paths, .mtlx reference handling)"
+    }
+  ],
+  "known_divergences": [
+    "transmission_dispersion_* is not representable (no wavelength-dependent IOR): 11 refractive materials render without prismatic fringing.",
+    "The stock studio box (environment.usda) is left out: viewed from outside it hides the ball. Swatches are lit by the viewer's studio environment.",
+    "The ball's neutral base and core use a constant mid-grey OpenPBR shader: upstream's NodeGraph-routed neutral material is not loadable by tinyusdz."
   ]
 }
