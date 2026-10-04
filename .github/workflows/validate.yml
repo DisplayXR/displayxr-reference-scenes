@@ -11,3 +11,15 @@ jobs:
       - uses: actions/checkout@v4
       - name: Scene manifests and licensing rules
         run: python3 scripts/validate.py
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Display tests are exactly what the generator writes
+        # The committed glbs are generated: a hand edit, or a generator change
+        # without regenerating, would let the two drift apart silently.
+        run: |
+          pip install numpy
+          python3 scripts/make_display_tests.py "$RUNNER_TEMP/dt"
+          for f in scenes/displayxr-display-tests/assets/*.glb; do
+            cmp "$f" "$RUNNER_TEMP/dt/$(basename "$f")"
+          done
