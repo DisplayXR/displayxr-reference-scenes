@@ -20,4 +20,10 @@ filled to 80%), 1 display height is exactly 1.25 scene units on any panel at
 least ~1.74:1 wide, so the labels are exact. On a narrower (e.g. portrait)
 panel, pass `--vh 1.25` to restore that mapping.
 
+**Licence.** To the extent possible under law, The DisplayXR Project has
+waived all copyright and related or neighbouring rights to these scenes
+([CC0 1.0](../../LICENSES/CC0-1.0.txt)). They contain no third-party content:
+the label glyphs are a hand-drawn bitmap font defined in the generator. The
+scenes are provided as-is, without warranty.
+
 Regenerate: `python3 scripts/make_display_tests.py scenes/displayxr-display-tests/assets`.
