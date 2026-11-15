@@ -11,17 +11,28 @@ set -euo pipefail
 HERE="$(cd "$(dirname "$0")/.." && pwd)"
 OUT="$(mkdir -p "${1:-out}" && cd "${1:-out}" && pwd)"
 SCENE="$HERE/scenes/openpbr-shader-playground/scene.json"
+REPO=$(python3 -c "import json;print(json.load(open('$SCENE'))['source']['repo'])")
 TAG=$(python3 -c "import json;print(json.load(open('$SCENE'))['source']['tag'])")
+COMMIT=$(python3 -c "import json;print(json.load(open('$SCENE'))['source']['commit'])")
 CONV=$(python3 -c "import json;print([p for p in json.load(open('$SCENE'))['packs'] if p['format']=='glb'][0]['converter_commit'])")
 WORK="$OUT/work"; mkdir -p "$WORK"
+UPSTREAM="$WORK/OpenPBRShaderPlayground"
 
-if [ ! -d "$WORK/OpenPBRShaderPlayground" ]; then
+if [ ! -d "$UPSTREAM" ]; then
     echo "==> upstream $TAG (~2 GB)"
-    git clone -q --depth 1 --branch "$TAG" \
-        https://github.com/DigitalProductionExampleLibrary/OpenPBRShaderPlayground.git \
-        "$WORK/OpenPBRShaderPlayground"
+    git clone -q --depth 1 --branch "$TAG" "$REPO.git" "$UPSTREAM"
 fi
-SRC="$WORK/OpenPBRShaderPlayground/ShdrPlygrnd"
+# The pack, its NOTICE and MODIFICATIONS.md all say they were built from source.commit: a tag
+# that upstream moved, or a work directory reused from another build, must not pass for it.
+# Checked after a fresh clone AND on a reused directory.
+HEAD_COMMIT=$(git -C "$UPSTREAM" rev-parse --verify -q HEAD || true)
+if [ "$HEAD_COMMIT" != "$COMMIT" ]; then
+    echo "error: $UPSTREAM is at '${HEAD_COMMIT:-no commit}', but $SCENE pins source.commit $COMMIT (tag $TAG)." >&2
+    echo "       Upstream moved the tag, or the work directory is stale: remove it and re-run, or update the pin deliberately." >&2
+    exit 1
+fi
+echo "==> upstream at pinned commit ${COMMIT:0:12}"
+SRC="$UPSTREAM/ShdrPlygrnd"
 
 echo "==> USD pack"
 rm -rf "$WORK/usd"; mkdir -p "$WORK/usd"
