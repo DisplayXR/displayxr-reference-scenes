@@ -22,13 +22,18 @@ It writes MODIFICATIONS.md describing exactly what changed, which the ASWF
 Digital Assets License requires of a redistribution.
 
 Usage:
-    build_usd_slim.py <src-scene-dir> <out-dir> [--max-size 1024] [--jpeg 90]
+    build_usd_slim.py <src-scene-dir> <out-dir> [--max-size 1024] [--jpeg 90] [--force]
+
+<out-dir> is deleted and rebuilt. It must not be <src-scene-dir>, inside it, or
+contain it, and an existing one must be this tool's own output (its
+MODIFICATIONS.md) or empty; --force deletes any other existing <out-dir>.
 
 Needs: numpy pillow tifffile imagecodecs  (imagecodecs: LZW / Deflate TIFF)
 """
 import argparse
 import hashlib
 import os
+import posixpath
 import re
 import shutil
 import sys
@@ -40,6 +45,70 @@ from PIL import Image
 TEX_EXT = (".tif", ".tiff", ".png", ".jpg", ".jpeg", ".exr")
 # A texture path inside a .mtlx value="..." or a USD @...@ asset path.
 PATH_RE = re.compile(r'([A-Za-z0-9_./\\<>-]+?\.(?:tif|tiff|png|jpg|jpeg|exr))', re.I)
+# Written into every MODIFICATIONS.md this tool produces: what marks a directory as its output.
+MARKER = "`scripts/build_usd_slim.py` (displayxr-reference-scenes)"
+
+
+def check_out(src, out, force):
+    """Refuse an <out> whose deletion could destroy anything but this tool's own output."""
+    if out == src or out.is_relative_to(src) or src.is_relative_to(out):
+        sys.exit(f"build_usd_slim: refusing: out ({out}) and src ({src}) are the same "
+                 "directory or one contains the other; <out> is deleted before the build")
+    if not out.exists():
+        return
+    if not out.is_dir():
+        sys.exit(f"build_usd_slim: refusing: out ({out}) exists and is not a directory")
+    if force or not any(out.iterdir()):
+        return
+    try:
+        ours = MARKER in (out / "MODIFICATIONS.md").read_text(errors="replace")
+    except OSError:
+        ours = False
+    if not ours:
+        sys.exit(f"build_usd_slim: refusing to delete {out}: it is not empty and has no "
+                 "MODIFICATIONS.md written by this tool; pass --force to delete it anyway")
+
+
+class MixedUdim(Exception):
+    """One <UDIM> reference whose tiles were re-encoded to different extensions."""
+
+
+def tile_pattern(name):
+    """A regex for the tiles of a <UDIM> file name: four digits, as the glob in main()."""
+    pre, post = name.split("<UDIM>", 1)
+    return re.compile(re.escape(pre) + "[0-9]{4}" + re.escape(post) + r"\Z")
+
+
+def new_suffix(key, renamed):
+    """The new extension of texture `key` (posix, relative to src), or None if it kept its own.
+    A <UDIM> pattern follows its tiles in the same directory, and they must agree."""
+    if "<UDIM>" not in key:
+        return renamed.get(key)
+    folder, name = posixpath.split(key)
+    tile = tile_pattern(name)
+    found = {v for k, v in renamed.items()
+             if posixpath.dirname(k) == folder and tile.match(posixpath.basename(k))}
+    if len(found) > 1:
+        raise MixedUdim(f"the tiles of {key} were re-encoded to mixed extensions "
+                         f"({', '.join(sorted(found))}); one reference cannot name them all")
+    return next(iter(found), None)
+
+
+def rewrite_text(text, src, ref_dir, renamed):
+    """Rename the texture references in one text layer. `ref_dir` is the layer's SOURCE folder:
+    each reference is resolved against it, then looked up by its path relative to src."""
+    def rewrite(m):
+        rel = m.group(1)
+        target = Path(os.path.normpath(os.path.join(ref_dir, rel.replace("\\", "/"))))
+        try:
+            key = target.relative_to(src).as_posix()
+        except ValueError:
+            return rel   # outside the scene: not copied, so never renamed
+        suffix = new_suffix(key, renamed)
+        if suffix is None:
+            return rel
+        return rel[: len(rel) - len(Path(rel).suffix)] + suffix
+    return PATH_RE.sub(rewrite, text)
 
 
 def load(path):
@@ -72,8 +141,11 @@ def main():
     ap.add_argument("out")
     ap.add_argument("--max-size", type=int, default=1024)
     ap.add_argument("--jpeg", type=int, default=90)
+    ap.add_argument("--force", action="store_true",
+                    help="delete an existing <out> even if it is not this tool's output")
     a = ap.parse_args()
     src, out = Path(a.src).resolve(), Path(a.out).resolve()
+    check_out(src, out, a.force)
     if out.exists():
         shutil.rmtree(out)
 
@@ -111,7 +183,7 @@ def main():
                     referenced[f.resolve()] = colour
 
     # copy everything except textures; re-encode referenced textures
-    renamed = {}   # old file name -> new file name (per directory, names are unique)
+    renamed = {}   # source texture, posix path relative to src -> its new extension
     stats = {"colour": 0, "data": 0, "skipped": [], "in_bytes": 0, "out_bytes": 0}
     for f in src.rglob("*"):
         if f.is_dir():
@@ -141,26 +213,21 @@ def main():
             Image.fromarray(img).save(new, "PNG", optimize=True)
             stats["data"] += 1
         stats["out_bytes"] += new.stat().st_size
-        renamed[f.name] = new.name
+        renamed[rel.as_posix()] = new.suffix
 
-    # rewrite references in text layers; a <UDIM> pattern follows its tiles
-    def rewrite(m):
-        rel = m.group(1)
-        name = Path(rel.replace("\\", "/")).name
-        probe = name.replace("<UDIM>", "1001")
-        tile_new = renamed.get(probe)
-        if tile_new is None and "<UDIM>" in name:
-            pre = name.split("<UDIM>")[0]
-            tile_new = next((v for k, v in renamed.items() if k.startswith(pre)), None)
-        if tile_new is None:
-            tile_new = renamed.get(name)
-        if tile_new is None:
-            return rel
-        return rel[: len(rel) - len(Path(rel).suffix)] + Path(tile_new).suffix
-    for p in out.rglob("*"):
-        if p.suffix.lower() in (".mtlx", ".usda"):
-            t = p.read_text(errors="replace")
-            p.write_text(PATH_RE.sub(rewrite, t))
+    # rewrite references in text layers, each resolved against its own layer's folder; a
+    # <UDIM> pattern follows its tiles. All computed before any is written, so a refusal
+    # leaves no half-rewritten layer behind.
+    rewritten = []
+    try:
+        for p in out.rglob("*"):
+            if p.suffix.lower() in (".mtlx", ".usda"):
+                ref_dir = src / p.parent.relative_to(out)
+                rewritten.append((p, rewrite_text(p.read_text(errors="replace"), src, ref_dir, renamed)))
+    except MixedUdim as e:
+        sys.exit(f"build_usd_slim: {e}")
+    for p, t in rewritten:
+        p.write_text(t)
 
     mb = lambda b: f"{b / 1e6:.0f} MB"
     total = sum(f.stat().st_size for f in out.rglob("*") if f.is_file())
